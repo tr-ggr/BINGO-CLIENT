@@ -1,0 +1,80 @@
+.B{
+    font-size: 50px;
+    background-color: white;
+}
+.ButtonClicked{
+    background-color: green;
+}
+
+
+.container{
+    position: absolute;
+    margin: auto;
+    inset: 0;
+    height: 800px;
+    width: 507px;
+    background-color: beige;
+}
+
+.LETTERS{
+    display: flex;
+    border: solid 1px black;
+    width: 500px;
+}
+
+.LETTERS > div{
+    border: solid 1px #1a1a1a; 
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    font-size: 50px;
+    background-color: white;
+}
+
+.bingocard{
+    height: 610px;
+    width: 500px;
+}
+
+.bingocard{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.bingocard > div{
+    border: solid 1px #1a1a1a; 
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    font-size: 50px;
+    background-color: white;
+}
+
+.CODE{
+    text-align: center;
+    line-height: 0.1;
+}
+
+.buttons{
+    display: flex;
+    height: 100px;
+    width: 507px;
+}
+
+.Check{
+    flex-grow: 1;
+}
+
+.NewCard{
+    flex-grow: 1;
+}
+
+.bingocard > div:hover{
+    background-color: green;
+}
+
+
+
+

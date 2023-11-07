@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <input type="text" id="CARD" placeholder="BAYOT!!">
+    <button id="newcard">SUBMIT</button>
+
+    <button id="postni">CLICKME</button>
+
+    <button id="check">CHECK</button>
+
+    <div id = "BINGOCARD">
+        <div id = "ARRAY"></div>
+    </div>
+
+    
+
+    <script>
+        var playcard = null;
+        var INPUT = null;
+
+        
+        $("#newcard").click(()=>{
+            INPUT = $('#CARD').val();
+            console.log(INPUT)
+        })
+
+        $("#postni").click(()=>{
+            $.ajax({
+                url:"http://www.hyeumine.com/getcard.php?bcode=" + INPUT,
+                success: (data)=>{
+                    obj = JSON.parse(data);
+                    $('<div class = "Code"><h3>' + obj.playcard_token +'</h3></div>').appendTo("#BINGOCARD")
+                    playcard = obj.playcard_token
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<span> ' + obj.card.B[i] + ' </span>').appendTo("#ARRAY")
+                    }
+                    $('<br>').appendTo("#ARRAY")
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<span> ' + obj.card.I[i] + ' </span>').appendTo("#ARRAY")
+                    }
+                    $('<br>').appendTo("#ARRAY")
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<span> ' + obj.card.N[i] + ' </span>').appendTo("#ARRAY")
+                    }
+                    $('<br>').appendTo("#ARRAY")
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<span> ' + obj.card.G[i] + ' </span>').appendTo("#ARRAY")
+                    }
+                    $('<br>').appendTo("#ARRAY")
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<span> ' + obj.card.O[i] + ' </span>').appendTo("#ARRAY")
+                    }
+                }
+            })
+        })
+
+    
+        $("#check").click(()=>{
+            console.log(playcard)
+
+            $.ajax({
+                url:"http://www.hyeumine.com/checkwin.php?playcard_token=" + playcard,
+                success: (data)=>{
+                    if(data == 0){
+                    $('<span> NOT WIN </span>').appendTo("#ARRAY")
+                    }
+                    else {
+                        $('<span> WIN </span>').appendTo("#ARRAY")
+                    }
+                }
+            })
+        })
+
+
+    </script>
+</body>
+</html>

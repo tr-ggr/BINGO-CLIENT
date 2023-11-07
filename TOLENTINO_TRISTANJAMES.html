@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .B{
+            font-size: 50px;
+            background-color: white;
+        }
+
+        .ButtonClicked{
+            background-color: green;
+        }
+
+
+        .container{
+            position: absolute;
+            margin: auto;
+            inset: 0;
+            height: 800px;
+            width: 507px;
+            background-color: beige;
+        }
+
+        .LETTERS{
+            display: flex;
+        }
+
+        .LETTERS > div{
+            border: solid 1px #1a1a1a; 
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            font-size: 50px;
+            background-color: white;
+        }
+
+        .bingocard{
+            height: 510px;
+            width: 500px;
+        }
+
+        .bingocard{
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+        }
+
+        .bingocard > div{
+            border: solid 1px #1a1a1a; 
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            font-size: 50px;
+            background-color: white;
+        }
+
+        .CODE{
+            text-align: center;
+            line-height: 0.1;
+        }
+
+        .buttons{
+            display: flex;
+            height: 100px;
+            width: 507px;
+        }
+
+        .Check{
+            flex-grow: 1;
+        }
+
+        .NewCard{
+            flex-grow: 1;
+        }
+
+        .bingocard > div:hover{
+            background-color: green;
+        }
+
+        .field{
+            padding: 5px;
+        }
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class = "container">
+
+        <div class = "CODE">
+            <div class = "FORM">
+                <input type="Text" class = "field" placeholder="Enter Code Here" autocomplete="off">
+            </div>
+            <h1 style = "font-size: 50px;" class = "cardcode"> NULL</h1>
+        </div>
+
+        <div class = "LETTERS">
+            <div class = "plot-b">B</div>
+            <div class = "plot-b">I</div>
+            <div class = "plot-b">N</div>
+            <div class = "plot-b">G</div>
+            <div class = "plot-b">O</div>
+        </div>
+
+        <div class = "bingocard">
+
+        </div>
+
+        <div class = "buttons">
+            <button class = "Check">CHECK<br><span class = STATUS>STATUS: NULL</span></button>
+            <button class = "NewCard">NEW CARD</button>
+        </div>
+
+    </div>
+
+
+    <script>
+        var playcard = null;
+        var INPUT = null;
+
+        $(".NewCard").click(()=>{
+            $(".STATUS").html('<span class = "STATUS">STATUS:NULL</span>')
+            
+            INPUT = $('.field').val();
+
+            $(".bingocard").html("")
+            $.ajax({
+                url:"http://www.hyeumine.com/getcard.php?bcode=" + INPUT,
+                success: (data)=>{
+                    obj = JSON.parse(data);
+                    $(".cardcode").html('<span style = "font-size: 50px;">' + obj.playcard_token +'</span>')
+                    playcard = obj.playcard_token
+
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<div><button class = "B" style="height: 100%;width: 100%;">' + obj.card.B[i] + '</button></div>').appendTo(".bingocard")
+                    }
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<div><button class = "B" style="height: 100%;width: 100%;">' + obj.card.I[i] + '</button></div>').appendTo(".bingocard")
+                    }
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<div><button class = "B" style="height: 100%;width: 100%;">' + obj.card.N[i] + '</button></div>').appendTo(".bingocard")
+                    }
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<div><button class = "B" style="height: 100%;width: 100%;">' + obj.card.G[i] + '</button></div>').appendTo(".bingocard")
+                    }
+                    for(let i = 0 ; i < 5 ; i++){
+                        console.log(obj.card.O[i])
+                        $('<div><button class = "B" style="height: 100%;width: 100%;">' + obj.card.O[i] + '</button></div>').appendTo(".bingocard")
+                    }
+                }
+            })
+        })
+
+    
+        $(".Check").click(()=>{
+            console.log(playcard)
+
+            $.ajax({
+                url:"http://www.hyeumine.com/checkwin.php?playcard_token=" + playcard,
+                success: (data)=>{
+                    if(data == 0){
+                        $(".STATUS").html('<span class = "STATUS">STATUS:NOT WIN</span>')
+                    }
+                    else {
+                        $(".STATUS").html('<span class = "STATUS">STATUS:WIN</span>')
+                    }
+                }
+            })
+        })
+
+        $(document).on('click', ".B", function(){
+            $(this).toggleClass('ButtonClicked');
+        });
+
+
+    </script>
+
+</body>
+</html>

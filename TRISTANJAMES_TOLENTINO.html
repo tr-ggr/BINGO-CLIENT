@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            background-color: #E8D595;
+        }
+
+        * {
+            font-family:sans-serif;
+        }
+
+        .B{
+            font-size: 50px;
+            background-color: white;
+        }
+
+        .ButtonClicked{
+            opacity: 0%;
+        }
+
+        .BackGround{
+            background-position: center;
+            background-size: contain;
+
+            background-image: url("https://static.wikia.nocookie.net/mrbean/images/4/4b/Mr_beans_holiday_ver2.jpg/revision/latest?cb=20181130033425")
+        }
+
+
+        .container{
+            position: absolute;
+            margin: auto;
+            inset: 0;
+            height: 800px;
+            width: 507px;
+            background-color: beige;
+            z-index: -1;
+        }
+
+        .LETTERS{
+            display: flex;
+        }
+
+        .LETTERS > div{
+            border: solid 1px #1a1a1a; 
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            font-size: 50px;
+            background-color: white;
+        }
+
+        .bingocard{
+            height: 510px;
+            width: 500px;
+        }
+
+        .bingocard{
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+        }
+
+        .bingocard > div{
+            border: solid 1px #1a1a1a; 
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            font-size: 50px;
+            background-color: white;
+        }
+
+        .CODE{
+            text-align: center;
+            line-height: 0.1;
+        }
+
+        .buttons{
+            display: flex;
+            height: 100px;
+            width: 507px;
+        }
+
+        .Check{
+            flex-grow: 1;
+        }
+
+        .NewCard{
+            flex-grow: 1;
+        }
+
+        .bingocard > div:hover{
+            background-color: green;
+        }
+
+        .field{
+            padding: 10px;
+            width: 500px;
+            border-radius: 100px;
+            height: 50px;
+            filter: drop-shadow(0px 10px 10px);
+        }
+
+        .overlay{
+            background-color:#E8D595;
+            z-index: 100;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2em;
+        }
+
+        .hide{
+            display: none;
+        }
+
+
+
+        .dashboard{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: solid 1px black;
+        }
+
+        .dashboard > button{
+            width: 100%
+            
+        }
+
+        .EnterCode{
+            font-size: 40px;
+        }
+
+        .START{
+            width: 250px;
+            height: 50px;
+            border: 0;
+            border-radius: 50px;
+            background-color: blue;
+            color:aliceblue;
+        }
+
+        .START:hover{
+            background-color: rgb(0, 0, 106);
+        }
+
+        .checkdash{
+            width: 250px;
+            height: 50px;
+            border-radius: 50px;
+            border: 0;
+            background-color: green;
+            color:aliceblue;
+        }
+
+        .checkdash:hover{
+            background-color: rgb(0, 69, 0);
+        }
+
+
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+    <div class = "overlay">
+        <div class = "EnterCode">TOLENTINO'S BINGO CLIENT</div>
+        <div class = "FORM">
+            <input type="Text" class = "field" placeholder="Enter Code Here" autocomplete="off">
+        </div>
+
+        <button class = "START">PLAY!</button>
+        <button class = "checkdash">CHECK DASHBOARD!</button>
+    </div>
+
+    <div class = "container">
+        <div class = "dashboard"><button class = "check_dashboard">DASHBOARD</button></div>
+        <div class = "CODE">
+            <h1 style = "font-size: 50px;" class = "cardcode"> NULL</h1>
+        </div>
+
+        <div class = "LETTERS">
+            <div class = "plot-b">B</div>
+            <div class = "plot-b">I</div>
+            <div class = "plot-b">N</div>
+            <div class = "plot-b">G</div>
+            <div class = "plot-b">O</div>
+        </div>
+
+        <div class = "bingocard">
+
+        </div>
+
+        <div class = "buttons">
+            <button class = "Check">CHECK CARD</button>
+            <button class = "NewCard">NEW CARD</button>
+            <button class = "NewGame">NEW GAME</button>
+        </div>
+
+    </div>
+
+
+    <script>
+        var playcard = null;
+        var INPUT = null;
+
+        $(".START:button").click(()=>{
+            INPUT = $('.field').val();
+            console.log(INPUT)
+
+            $.ajax({
+                url:"http://www.hyeumine.com/getcard.php?bcode=" + INPUT,
+                success: (data)=>{
+                    obj = JSON.parse(data);
+                    if(data == 0){
+                        alert("Wrong Code!")
+                    }
+                    else{
+                        $(".bingocard").html("")
+                        $(".overlay").toggleClass('hide');
+                        bruh();
+                    }
+                }
+            })
+        })
+
+        $(".NewCard").click(()=>{
+            $(".STATUS").html('<span class = "STATUS">STATUS:NULL</span>')
+            $(".bingocard").html("")
+            bruh();
+
+        })
+
+    
+        $(".Check").click(()=>{
+            console.log(playcard)
+            console.log(INPUT)
+
+            $.ajax({
+                url:"http://www.hyeumine.com/checkwin.php?playcard_token=" + playcard,
+                success: (data)=>{
+                    if(data == 0){
+                        alert("Card still not Win")
+                    }
+                    else {
+                        alert("Card Win")
+                    }
+                }
+            })
+        })
+
+        $(document).on('click', ".B", function(){
+            $(this).toggleClass('ButtonClicked');
+            $(this).parent().toggleClass('BackGround');
+        });
+
+        $(document).on('click', ".NewGame", function(){
+            $(".overlay").toggleClass('hide');
+        });
+
+        $(document).on('click', ".check_dashboard", function(){
+           window.open("http://www.hyeumine.com/bingodashboard.php?bcode=" + INPUT)
+        });
+
+        $(document).on('click', ".checkdash", function(){
+           window.open("http://www.hyeumine.com/bingodashboard.php?bcode=")
+        });
+
+        function bruh(){
+
+            $.ajax({
+                url:"http://www.hyeumine.com/getcard.php?bcode=" + INPUT,
+                success: (data)=>{
+                    obj = JSON.parse(data);
+                    $(".cardcode").html('<span style = "font-size: 50px;">' + obj.playcard_token +'</span>')
+                    playcard = obj.playcard_token
+
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<div><button class = "B" style="height: 100%;width: 100%;">' + obj.card.B[i] + '</button></div>').appendTo(".bingocard")
+                    }
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<div><button class = "B" style="height: 100%;width: 100%;">' + obj.card.I[i] + '</button></div>').appendTo(".bingocard")
+                    }
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<div><button class = "B" style="height: 100%;width: 100%;">' + obj.card.N[i] + '</button></div>').appendTo(".bingocard")
+                    }
+                    for(let i = 0 ; i < 5 ; i++){
+                        $('<div><button class = "B" style="height: 100%;width: 100%;">' + obj.card.G[i] + '</button></div>').appendTo(".bingocard")
+                    }
+                    for(let i = 0 ; i < 5 ; i++){
+                        console.log(obj.card.O[i])
+                        $('<div><button class = "B" style="height: 100%;width: 100%;">' + obj.card.O[i] + '</button></div>').appendTo(".bingocard")
+                    }
+
+                    // for(each letter of "BINGO"){
+                    //     <div class = "plot-b">
+                    //         for(each num of obj.card.${letter}){
+
+                    //         }
+
+                    // }
+                }
+            })
+
+        }
+
+    </script>
+
+</body>
+</html>
